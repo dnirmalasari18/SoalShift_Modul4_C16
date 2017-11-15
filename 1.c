@@ -1,6 +1,7 @@
 #define FUSE_USE_VERSION 28
 #include <fuse.h>
 #include <stdio.h>
+#include<stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -46,14 +47,22 @@ static int xmp_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		return -errno;
 
 	while ((de = readdir(dp)) != NULL) {
-		struct stat st;
+/*char* newName;
+		newName = de->d_name;
+        int cek=0;
+        if(newName[strlen(de->d_name)-4]=='.'){
+            if(newName[strlen(de->d_name)-3] == 'p' && newName[strlen(de->d_name)-2]== 'd' && newName[strlen(de->d_name)-1]=='f') cek = 1;
+            else if(newName[strlen(de->d_name)-3] == 'd' && newName[strlen(de->d_name)-2]== 'o' && newName[strlen(de->d_name)-1]=='c') cek = 1;
+            if(newName[strlen(de->d_name)-3] == 't' && newName[strlen(de->d_name)-2]== 'x' && newName[strlen(de->d_name)-1]=='f') cek = 1;
+        }
+	*/	struct stat st;
 		memset(&st, 0, sizeof(st));
 		st.st_ino = de->d_ino;
 		st.st_mode = de->d_type << 12;
 		res = (filler(buf, de->d_name, &st, 0));
 			if(res!=0) break;
 	}
-
+    system("notify-send hello");
 	closedir(dp);
 	return 0;
 }
