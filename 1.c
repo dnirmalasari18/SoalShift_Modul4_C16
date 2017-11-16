@@ -79,7 +79,7 @@ static int xmp_read(const char *path, char *buf, size_t size, off_t offset,
 	}
 	else {
 		memcpy(newFile, path, strlen(path));
-		newFile[strlen(path)] = '\0';
+		//newFile[strlen(path)] = '\0';
 		sprintf(fpath, "%s%s",dirpath,newFile);
 	}
 	int cek=0;
@@ -103,9 +103,11 @@ static int xmp_read(const char *path, char *buf, size_t size, off_t offset,
         return res;
     }
     else {
-        system("zenity --error --title=\"Warning!\" --text=\"Terjadi Kesalahan! File berisi konten berbahaya.\n\"");
-        char temp[1000];
+        system("zenity --error --title=\"Pesan error\" --text=\"Terjadi Kesalahan! File berisi konten berbahaya.\n\"");
+        char temp[1000], aaaa[1000] ;
         sprintf(temp,"%s.ditandai",fpath);
+        printf("fpathnya %s\n",fpath);
+        rename (fpath,temp);
     }
 }
 
