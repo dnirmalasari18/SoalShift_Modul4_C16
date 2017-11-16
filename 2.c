@@ -1,7 +1,6 @@
 #define FUSE_USE_VERSION 28
 #include <fuse.h>
 #include <stdio.h>
-#include<stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -9,12 +8,14 @@
 #include <errno.h>
 #include <sys/time.h>
 
-static const char *dirpath = "/home/dell/Documents";
+static const char *dirpath = "/home/dell/Dokumen";
 
 static int xmp_getattr(const char *path, struct stat *stbuf)
 {
-  int res;
+	printf("xmp_getattr: %s\n", path);
+	int res;
 	char fpath[1000];
+
 	sprintf(fpath,"%s%s",dirpath,path);
 	res = lstat(fpath, stbuf);
 
@@ -27,7 +28,8 @@ static int xmp_getattr(const char *path, struct stat *stbuf)
 static int xmp_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		       off_t offset, struct fuse_file_info *fi)
 {
-  char fpath[1000];
+	printf("xmp_readdir: %s\n", path);
+	char fpath[1000];
 	if(strcmp(path,"/") == 0)
 	{
 		path=dirpath;
@@ -47,14 +49,14 @@ static int xmp_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		return -errno;
 
 	while ((de = readdir(dp)) != NULL) {
-        struct stat st;
+		struct stat st;
 		memset(&st, 0, sizeof(st));
 		st.st_ino = de->d_ino;
 		st.st_mode = de->d_type << 12;
 		res = (filler(buf, de->d_name, &st, 0));
 			if(res!=0) break;
 	}
-    system("notify-send hello");
+
 	closedir(dp);
 	return 0;
 }
@@ -62,15 +64,11 @@ static int xmp_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 static int xmp_read(const char *path, char *buf, size_t size, off_t offset,
 		    struct fuse_file_info *fi)
 {
-  char fpath[1000];
-	if(strcmp(path,"/") == 0)
-	{
-		path=dirpath;
-		sprintf(fpath,"%s",path);
-	}
-	else sprintf(fpath, "%s%s",dirpath,path);
+	printf("xmp_read: %s\n", path);
+	char fpath[1000];
+	
 	int res = 0;
-  int fd = 0 ;
+	int fd = 0 ;
 
 	(void) fi;
 	fd = open(fpath, O_RDONLY);
