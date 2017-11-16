@@ -104,10 +104,27 @@ static int xmp_read(const char *path, char *buf, size_t size, off_t offset,
     }
     else {
         system("zenity --error --title=\"Pesan error\" --text=\"Terjadi Kesalahan! File berisi konten berbahaya.\n\"");
-        char temp[1000], aaaa[1000] ;
+        char temp[1000];
         sprintf(temp,"%s.ditandai",fpath);
         printf("fpathnya %s\n",fpath);
+        char aa[1000],bb[1000];
+        sprintf(bb,"chmod 000 %s",fpath);
+        system(bb);
+        mkdir("/home/dell/Dokumen/rahasia",0777);
+
         rename (fpath,temp);
+        
+                //no2
+ //      struct stat st = {0};
+
+   //     if (stat("/home/dell/Dokumen/rahasia", &st) == -1) {
+     //   mkdir("/home/dell/Dokumen/rahasia",0777);
+     //   }
+        
+   //
+      //  
+        sprintf (aa, "mv %s /home/dell/Dokumen/rahasia",fpath);
+        system(aa);
     }
 }
 
